@@ -12,13 +12,16 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Log
+import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var btnCamera: Button
-    private lateinit var cameraHandler: CameraHandler
+    private var cameraHandler: CameraHandler = CameraHandler()
+    private var pictureHandler: PictureHandler = PictureHandler()
+    private lateinit var image: ImageView;
     private lateinit var cameraLauncher: ActivityResultLauncher<Intent>
     private lateinit var cameraPermissionLauncher: ActivityResultLauncher<String>
 
@@ -31,11 +34,9 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        cameraHandler = CameraHandler()
         btnCamera = findViewById(R.id.btnCamera)
-
+        image = findViewById(R.id.testView)
         initCameraLaunchers()
-
         btnCamera.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                 openCamera()
@@ -54,6 +55,9 @@ class MainActivity : AppCompatActivity() {
         { result ->
             if (result.resultCode == RESULT_OK) {
                 Log.i("Image saved", "Image saved at: ${cameraHandler.photoFile.absolutePath}")
+                val processedBitmap = pictureHandler.processImage(cameraHandler.photoFile)
+                pictureHandler.compressFile(cameraHandler.photoFile, bitmap = processedBitmap)
+                image.setImageBitmap(processedBitmap)
             }
         }
         cameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission())

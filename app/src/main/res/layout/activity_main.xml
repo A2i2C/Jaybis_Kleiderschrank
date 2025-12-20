@@ -22,4 +22,12 @@
         android:layout_height="wrap_content"
         android:text="Foto aufnehmen"/>
 
+    <ImageView
+        android:id="@+id/testView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="218dp"
+        tools:layout_editor_absoluteY="34dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
