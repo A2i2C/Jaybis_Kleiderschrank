@@ -1,10 +1,10 @@
-package com.example.kleiderschrank
+package com.example.kleiderschrank.handler
 
 import android.content.Context
 import android.content.Intent
+import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
-import android.os.Environment
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -17,13 +17,12 @@ class CameraHandler {
     fun createCameraIntent(context: Context) : Intent {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-        photoFile = createImageFile(context) // To be implemented: create a method to create an image file
+        photoFile = createImageFile(context)
         val photoURI = FileProvider.getUriForFile(
             context,
             "${context.packageName}.fileprovider",
             photoFile
         )
-
         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
         return intent
     }

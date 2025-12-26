@@ -1,12 +1,13 @@
-package com.example.kleiderschrank
+package com.example.kleiderschrank.handler
 
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.media.ExifInterface
 import java.io.File
-import kotlin.math.max
 
 class PictureHandler {
-    public fun processImage(photoFile: File): Bitmap {
+     fun processImage(photoFile: File): Bitmap {
         val bitmap = loadBitmap(photoFile)
         val rotate = rotateIfRequired(bitmap, photoFile)
         return scaleBitmap(rotate)
