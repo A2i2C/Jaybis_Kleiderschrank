@@ -10,7 +10,8 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [Kleidung::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 
 abstract class Kleiderschrank: RoomDatabase() {

@@ -5,16 +5,11 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.example.kleiderschrank.datahandling.entity.Kleidung
 
-class KleidungDao {
-
-    @Dao
-    interface KleidungDao {
-
-        @Insert
-        suspend fun insert(kleidung: Kleidung)
-
-        @Query("SELECT * FROM kleidung")
-        suspend fun getAll(): List<Kleidung>
-    }
-
+@Dao
+interface KleidungDao {
+    @Insert
+     fun insert(kleidung: Kleidung)
+    @Query("SELECT * FROM kleidung")
+     fun getAll(): List<Kleidung>
 }
+
