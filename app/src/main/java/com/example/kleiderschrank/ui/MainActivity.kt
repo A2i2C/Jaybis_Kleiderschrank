@@ -15,6 +15,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.kleiderschrank.R
+import com.example.kleiderschrank.datahandling.dao.KleidungDao
+import com.example.kleiderschrank.datahandling.database.Kleiderschrank
+import com.example.kleiderschrank.datahandling.entity.Kleidung
 import com.example.kleiderschrank.handler.CameraHandler
 import com.example.kleiderschrank.handler.PictureHandler
 
@@ -26,6 +29,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var image: ImageView
     private lateinit var cameraLauncher: ActivityResultLauncher<Intent>
     private lateinit var cameraPermissionLauncher: ActivityResultLauncher<String>
+    lateinit var db: Kleiderschrank
+    lateinit var kleidungDao: KleidungDao
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +52,8 @@ class MainActivity : AppCompatActivity() {
                 cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
             }
         }
+        db = Kleiderschrank.getDatabase(this)
+        kleidungDao = db.kleidungDao()
     }
     private fun openCamera() {
         val cameraIntent = cameraHandler.createCameraIntent(this)
@@ -60,6 +68,15 @@ class MainActivity : AppCompatActivity() {
                 val processedBitmap = pictureHandler.processImage(cameraHandler.photoFile)
                 pictureHandler.compressFile(cameraHandler.photoFile, bitmap = processedBitmap)
                 image.setImageBitmap(processedBitmap)
+                val kleidung = Kleidung(
+                    bildPfad = cameraHandler.photoFile.absolutePath)
+                Thread {
+                    kleidungDao.insert(kleidung)
+                    val alleKleidungsstuecke = kleidungDao.getAll()
+                    for (item in alleKleidungsstuecke) {
+                        Log.i("Datenbank Inhalt", "ID: ${item.id}, Name: ${item.name}, BildPfad: ${item.bildPfad}")
+                    }
+                }.start()
             }
         }
         cameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission())
@@ -73,3 +90,4 @@ class MainActivity : AppCompatActivity() {
 
 
 }
+
