@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Kleiderschrank</string>
+    <string name="kleidung_bild">Kleidungsbild</string>
 </resources>
